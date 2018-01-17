@@ -17,14 +17,13 @@ tab<-tab[2:length(tab)]
 
 
 
-#ortography corrections
+#orthography corrections
 for(i in 1:nrow(tab)){
-tab[i,4]<-str_replace_all(tab[i,4],'Bogotá','Bogota')
-tab[i,4]<-str_replace_all(tab[i,4],'Medellín','Medellin')
-tab[i,4]<-str_replace_all(tab[i,4],'Itaguí','Itagui')
-tab[i,4]<-str_replace_all(tab[i,4],'Tuluá','Tulua')
+tab[i,4]<-str_replace_all(tab[i,4],'BogotÃ¡','Bogota')
+tab[i,4]<-str_replace_all(tab[i,4],'MedellÃ­n','Medellin')
+tab[i,4]<-str_replace_all(tab[i,4],'ItaguÃ­','Itagui')
+tab[i,4]<-str_replace_all(tab[i,4],'TuluÃ¡','Tulua')
 }
-
 
 
 #generation of file
