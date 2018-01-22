@@ -34,7 +34,7 @@ line<-c(line,dataraw[dataraw[7]==codecom[i]&dataraw[8]==ages[j],11][1])
 tab<-rbind(tab,line)
 }
 tab<-cbind(codecom,namecom,tab)
-colnames(tab)<-c('Nombre Comuna','Codigo Comuna',ages)
+colnames(tab)<-c('Codigo Comuna','Nombre Comuna',ages)
 
 
 
