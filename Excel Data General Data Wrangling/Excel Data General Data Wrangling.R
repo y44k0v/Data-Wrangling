@@ -1,4 +1,5 @@
 
+
 #packages
 install.packages('readxl', repos='http://cran.us.r-project.org')
 install.packages('XLConnect', repos='http://cran.us.r-project.org')
@@ -57,11 +58,27 @@ for(i in 1:nrow(id_wrong)){
 colnames(id_wrong)<-c('Card Balance','Credit Card Bank A','Credit Card Bank B','Mortgage Credit')
 
 
+#inconsistencies with the genre
+genre_wrong<-c()
+for(i in 1:nrow(card_balance)){
+	if(is.na(as.character(mortgage_credit[mortgage_credit[1]==as.numeric(card_balance[i,1]),2][1,1]))==F & as.character(mortgage_credit[mortgage_credit[1]==as.numeric(card_balance[i,1]),2][1,1])!=card_balance[i,2])
+	genre_wrong<-c(genre_wrong,card_balance[i,1])
+}
+genre_wrong<-as.data.frame(as.numeric(genre_wrong))
+colnames(genre_wrong)<-c('ID')
+
 
 #generation file
 fileout<-loadWorkbook('Problems.xlsx',create=T)
+#ID wrong
 createSheet(fileout,name='ID')
 createName(fileout,name='ID',formula='ID!$A$1')
 writeNamedRegion(fileout,id_wrong,name='ID')
+#Genre Wrong
+createSheet(fileout,name='Genre')
+createName(fileout,name='Genre',formula='Genre!$A$1')
+writeNamedRegion(fileout,genre_wrong,name='Genre')
+#Save File
 saveWorkbook(fileout)
+
 
