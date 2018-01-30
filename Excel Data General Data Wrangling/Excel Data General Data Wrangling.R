@@ -64,7 +64,10 @@ for(i in 1:length(card_balance_id_wrong)){
 	if(is.na(card_balance_id_wrong[i])==F)
 	temp2<-as.numeric(card_balance_temp[card_balance_temp[2]==card_balance_id_wrong[i]][1])
 	card_balance_temp<-card_balance_temp[-temp2,]
+	card_balance_temp<-card_balance_temp[-1]
+	card_balance_temp<-cbind(c(1:nrow(card_balance_temp)),card_balance_temp)
 }
+card_balance_temp<-card_balance_temp[-1]
 #credit card bank A
 credit_card_bank_a_temp<-cbind(c(1:nrow(credit_card_bank_a)),credit_card_bank_a)
 temp2<-0
@@ -72,7 +75,10 @@ for(i in 1:length(credit_card_bank_a_id_wrong)){
 	if(is.na(credit_card_bank_a_id_wrong[i])==F)
 	temp2<-as.numeric(credit_card_bank_a_temp[credit_card_bank_a_temp[2]==credit_card_bank_a_id_wrong[i]][1])
 	credit_card_bank_a_temp<-credit_card_bank_a_temp[-temp2,]
+	credit_card_bank_a_temp<-credit_card_bank_a_temp[-1]
+	credit_card_bank_a_temp<-cbind(c(1:nrow(credit_card_bank_a_temp)),credit_card_bank_a_temp)
 }
+credit_card_bank_a_temp<-credit_card_bank_a_temp[-1]
 #credit card bank B
 credit_card_bank_b_temp<-cbind(c(1:nrow(credit_card_bank_b)),credit_card_bank_b)
 temp2<-0
@@ -80,7 +86,10 @@ for(i in 1:length(credit_card_bank_b_id_wrong)){
 	if(is.na(credit_card_bank_b_id_wrong[i])==F)
 	temp2<-as.numeric(credit_card_bank_b_temp[credit_card_bank_b_temp[2]==credit_card_bank_b_id_wrong[i]][1])
 	credit_card_bank_b_temp<-credit_card_bank_b_temp[-temp2,]
+	credit_card_bank_b_temp<-credit_card_bank_b_temp[-1]
+	credit_card_bank_b_temp<-cbind(c(1:nrow(credit_card_bank_b_temp)),credit_card_bank_b_temp)
 }
+credit_card_bank_b_temp<-credit_card_bank_b_temp[-1]
 #mortgage credit
 mortgage_credit_temp<-cbind(c(1:nrow(mortgage_credit)),mortgage_credit)
 temp2<-0
@@ -88,7 +97,10 @@ for(i in 1:length(mortgage_credit_id_wrong)){
 	if(is.na(mortgage_credit_id_wrong[i])==F)
 	temp2<-as.numeric(mortgage_credit_temp[mortgage_credit_temp[2]==mortgage_credit_id_wrong[i]][1])
 	mortgage_credit_temp<-mortgage_credit_temp[-temp2,]
+	mortgage_credit_temp<-mortgage_credit_temp[-1]
+	mortgage_credit_temp<-cbind(c(1:nrow(mortgage_credit_temp)),mortgage_credit_temp)
 }
+mortgage_credit_temp<-mortgage_credit_temp[-1]
 
 
 #inconsistencies with the genre
@@ -108,6 +120,18 @@ fileout2<-loadWorkbook('Data Wrangled.xlsx',create=T)
 createSheet(fileout2,name='CardBalance')
 createName(fileout2,name='CardBalance',formula='CardBalance!$A$1')
 writeNamedRegion(fileout2,card_balance_temp,name='CardBalance')
+#credit card bank a
+createSheet(fileout2,name='CreditCardBankA')
+createName(fileout2,name='CreditCardBankA',formula='CreditCardBankA!$A$1')
+writeNamedRegion(fileout2,credit_card_bank_a_temp,name='CreditCardBankA')
+#credit card bank a
+createSheet(fileout2,name='CreditCardBankB')
+createName(fileout2,name='CreditCardBankB',formula='CreditCardBankB!$A$1')
+writeNamedRegion(fileout2,credit_card_bank_b_temp,name='CreditCardBankB')
+#mortgage credit
+createSheet(fileout2,name='MortgageCredit')
+createName(fileout2,name='MortgageCredit',formula='MortgageCredit!$A$1')
+writeNamedRegion(fileout2,mortgage_credit_temp,name='MortgageCredit')
 #ID wrong
 createSheet(fileout1,name='ID')
 createName(fileout1,name='ID',formula='ID!$A$1')
