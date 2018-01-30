@@ -1,5 +1,3 @@
-
-
 #packages
 install.packages('readxl', repos='http://cran.us.r-project.org')
 install.packages('XLConnect', repos='http://cran.us.r-project.org')
@@ -58,6 +56,41 @@ for(i in 1:nrow(id_wrong)){
 colnames(id_wrong)<-c('Card Balance','Credit Card Bank A','Credit Card Bank B','Mortgage Credit')
 
 
+#elimination of registers with id wrong
+#card balance
+card_balance_temp<-cbind(c(1:nrow(card_balance)),card_balance)
+temp2<-0
+for(i in 1:length(card_balance_id_wrong)){
+	if(is.na(card_balance_id_wrong[i])==F)
+	temp2<-as.numeric(card_balance_temp[card_balance_temp[2]==card_balance_id_wrong[i]][1])
+	card_balance_temp<-card_balance_temp[-temp2,]
+}
+#credit card bank A
+credit_card_bank_a_temp<-cbind(c(1:nrow(credit_card_bank_a)),credit_card_bank_a)
+temp2<-0
+for(i in 1:length(credit_card_bank_a_id_wrong)){
+	if(is.na(credit_card_bank_a_id_wrong[i])==F)
+	temp2<-as.numeric(credit_card_bank_a_temp[credit_card_bank_a_temp[2]==credit_card_bank_a_id_wrong[i]][1])
+	credit_card_bank_a_temp<-credit_card_bank_a_temp[-temp2,]
+}
+#credit card bank B
+credit_card_bank_b_temp<-cbind(c(1:nrow(credit_card_bank_b)),credit_card_bank_b)
+temp2<-0
+for(i in 1:length(credit_card_bank_b_id_wrong)){
+	if(is.na(credit_card_bank_b_id_wrong[i])==F)
+	temp2<-as.numeric(credit_card_bank_b_temp[credit_card_bank_b_temp[2]==credit_card_bank_b_id_wrong[i]][1])
+	credit_card_bank_b_temp<-credit_card_bank_b_temp[-temp2,]
+}
+#mortgage credit
+mortgage_credit_temp<-cbind(c(1:nrow(mortgage_credit)),mortgage_credit)
+temp2<-0
+for(i in 1:length(mortgage_credit_id_wrong)){
+	if(is.na(mortgage_credit_id_wrong[i])==F)
+	temp2<-as.numeric(mortgage_credit_temp[mortgage_credit_temp[2]==mortgage_credit_id_wrong[i]][1])
+	mortgage_credit_temp<-mortgage_credit_temp[-temp2,]
+}
+
+
 #inconsistencies with the genre
 genre_wrong<-c()
 for(i in 1:nrow(card_balance)){
@@ -68,17 +101,22 @@ genre_wrong<-as.data.frame(as.numeric(genre_wrong))
 colnames(genre_wrong)<-c('ID')
 
 
-#generation file
-fileout<-loadWorkbook('Problems.xlsx',create=T)
+#generation files
+fileout1<-loadWorkbook('Problems.xlsx',create=T)
+fileout2<-loadWorkbook('Data Wrangled.xlsx',create=T)
+#card balance
+createSheet(fileout2,name='CardBalance')
+createName(fileout2,name='CardBalance',formula='CardBalance!$A$1')
+writeNamedRegion(fileout2,card_balance_temp,name='CardBalance')
 #ID wrong
-createSheet(fileout,name='ID')
-createName(fileout,name='ID',formula='ID!$A$1')
-writeNamedRegion(fileout,id_wrong,name='ID')
+createSheet(fileout1,name='ID')
+createName(fileout1,name='ID',formula='ID!$A$1')
+writeNamedRegion(fileout1,id_wrong,name='ID')
 #Genre Wrong
-createSheet(fileout,name='Genre')
-createName(fileout,name='Genre',formula='Genre!$A$1')
-writeNamedRegion(fileout,genre_wrong,name='Genre')
-#Save File
-saveWorkbook(fileout)
-
+createSheet(fileout1,name='Genre')
+createName(fileout1,name='Genre',formula='Genre!$A$1')
+writeNamedRegion(fileout1,genre_wrong,name='Genre')
+#Save Files
+saveWorkbook(fileout1)
+saveWorkbook(fileout2)
 
