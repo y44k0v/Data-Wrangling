@@ -113,6 +113,59 @@ genre_wrong<-as.data.frame(as.numeric(genre_wrong))
 colnames(genre_wrong)<-c('ID')
 
 
+#suspect card balance
+suspect_card_balance<-c()
+index_suspect<-0
+temp3<-F
+temp4<-c()
+temp5<-0
+temp6<-0
+temp7<-c()
+for(i in 1:nrow(card_balance_temp)){
+	for(j in 3:(ncol(card_balance_temp)-1)){
+		index_suspect<-card_balance_temp[i,j+1]/card_balance_temp[i,j]
+		if(index_suspect>3){
+			if(temp3==F){
+				temp4<-c(card_balance_temp[i,1],paste('Month',as.character(j-1)))
+				temp3<-T
+			}
+				else{
+				temp4<-c(temp4,paste('Month',as.character(j-2)))
+				}
+		}		
+	}
+	if(length(temp4)!=0){
+		temp6<-temp6+1
+		
+		if(length(temp4)<temp5){
+			for(i in 1:(temp5-length(temp4))){
+				temp4<-c(temp4,'')
+				suspect_card_balance<-rbind(suspect_card_balance,temp4)
+			}
+		}
+		if(length(temp4)>temp5){
+			for(i in 1:(length(temp4)-temp5)){
+				for(i in (temp6)){
+					temp7<-c(temp7,'')
+				}
+				suspect_card_balance<-cbind(suspect_card_balance,temp7)
+			}
+			temp7<-c()
+			suspect_card_balance<-rbind(suspect_card_balance,temp4)
+		}
+		if(length(temp4)==temp5){
+					suspect_card_balance<-rbind(suspect_card_balance,temp4)
+		}
+	}
+	temp5<-max(length(temp4),temp5)
+	temp3<-F
+	temp4<-c()
+}
+suspect_card_balance<-suspect_card_balance[-1,]
+colnames(suspect_card_balance)<-c('ID',rep('Suspect Month',times=ncol(suspect_card_balance)-1))
+rownames(suspect_card_balance)<-c(rep('',times=nrow(suspect_card_balance)))
+
+
 #generation files
 fileout1<-loadWorkbook('Problems.xlsx',create=T)
 fileout2<-loadWorkbook('Data Wrangled.xlsx',create=T)
@@ -140,6 +193,10 @@ writeNamedRegion(fileout1,id_wrong,name='ID')
 createSheet(fileout1,name='Genre')
 createName(fileout1,name='Genre',formula='Genre!$A$1')
 writeNamedRegion(fileout1,genre_wrong,name='Genre')
+#suspect card balance
+createSheet(fileout1,name='SuspectCardBalance')
+createName(fileout1,name='SuspectCardBalance',formula='SuspectCardBalance!$A$1')
+writeNamedRegion(fileout1,suspect_card_balance,name='SuspectCardBalance')
 #Save Files
 saveWorkbook(fileout1)
 saveWorkbook(fileout2)
