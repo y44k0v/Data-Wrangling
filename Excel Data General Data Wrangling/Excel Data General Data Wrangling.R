@@ -121,6 +121,44 @@ for(i in 1:nrow(card_balance)){
 genre_wrong<-as.data.frame(as.numeric(genre_wrong))
 colnames(genre_wrong)<-c('ID')
 
+#empty registers and replacement for mean	
+#card balance 
+card_balance_empty_reg<-c(0,0)
+temp1<-0
+temp2<-c()
+temp3<-c()
+temp4<-c()	
+for(i in 1:nrow(card_balance_temp)){
+	for(j in 3:ncol(card_balance_temp)){
+		if(is.na(card_balance_temp[i,j])==T){
+			temp1<-temp1+1
+		}
+		if(is.na(card_balance_temp)[i,j]==F){
+			temp3<-c(temp3,as.numeric(card_balance_temp[i,j]))
+		}
+	}
+	if(temp1>5){
+		temp4<-c(temp4,as.numeric(card_balance_temp[i,1]))
+	}
+	if(temp1==(ncol(card_balance_temp)-2)){
+		temp2<-c(card_balance_temp[i,1],'No exist')
+	}
+	if(temp1<(ncol(card_balance_temp)-2) & temp1>0){
+		card_balance_empty_reg<-rbind(card_balance_empty_reg,c(card_balance_temp[i,1],temp1))
+		for(j in 3:(ncol(card_balance_temp))){
+			if(is.na(card_balance_temp[i,j])==T){
+				card_balance_temp[i,j]<-as.numeric(mean(temp3))
+			}
+		}
+	}
+	temp1<-0
+	temp2<-c()
+	temp3<-c()
+}
+card_balance_empty_reg<-card_balance_empty_reg[-1,]
+card_balance_temp<-card_balance_temp[-temp4,]
+colnames(card_balance_empty_reg)<-c('ID','Number of Missing Values')
+
 
 #suspect card balance
 suspect_card_balance<-c()
@@ -132,9 +170,7 @@ temp6<-0
 temp7<-c()
 for(i in 1:nrow(card_balance_temp)){
 	for(j in 3:(ncol(card_balance_temp)-1)){
-		if(is.numeric(card_balance_temp[i,j+1])==T & is.numeric(card_balance_temp[i,j])==T)){
 			index_suspect<-card_balance_temp[i,j+1]/card_balance_temp[i,j]
-		}
 		if(index_suspect>3){
 			if(temp3==F){
 				temp4<-c(card_balance_temp[i,1],paste('Month',as.character(j-1)))
@@ -147,7 +183,6 @@ for(i in 1:nrow(card_balance_temp)){
 	}
 	if(length(temp4)!=0){
 		temp6<-temp6+1
-		
 		if(length(temp4)<temp5){
 			for(i in 1:(temp5-length(temp4))){
 				temp4<-c(temp4,'')
@@ -215,6 +250,10 @@ writeNamedRegion(fileout1,id_wrong,name='ID')
 createSheet(fileout1,name='Genre')
 createName(fileout1,name='Genre',formula='Genre!$A$1')
 writeNamedRegion(fileout1,genre_wrong,name='Genre')
+#empty registers
+createSheet(fileout1,name='EmptyRegisters')
+createName(fileout1,name='EmptyRegisters',formula='EmptyRegisters!$A$1')
+writeNamedRegion(fileout1,card_balance_empty_reg,name='EmptyRegisters')
 #suspect card balance
 createSheet(fileout1,name='SuspectCardBalance')
 createName(fileout1,name='SuspectCardBalance',formula='SuspectCardBalance!$A$1')
