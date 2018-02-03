@@ -132,14 +132,16 @@ temp6<-0
 temp7<-c()
 for(i in 1:nrow(card_balance_temp)){
 	for(j in 3:(ncol(card_balance_temp)-1)){
-		index_suspect<-card_balance_temp[i,j+1]/card_balance_temp[i,j]
+		if(is.numeric(card_balance_temp[i,j+1])==T & is.numeric(card_balance_temp[i,j])==T)){
+			index_suspect<-card_balance_temp[i,j+1]/card_balance_temp[i,j]
+		}
 		if(index_suspect>3){
 			if(temp3==F){
 				temp4<-c(card_balance_temp[i,1],paste('Month',as.character(j-1)))
 				temp3<-T
 			}
 				else{
-				temp4<-c(temp4,paste('Month',as.character(j-2)))
+				temp4<-c(temp4,paste('Month',as.character(j-1)))
 				}
 		}		
 	}
@@ -171,6 +173,17 @@ for(i in 1:nrow(card_balance_temp)){
 	temp4<-c()
 }
 suspect_card_balance<-suspect_card_balance[-1,]
+temp8<-duplicated(suspect_card_balance)
+temp9<-cbind(c(1:nrow(suspect_card_balance)),suspect_card_balance)
+temp9<-as.data.frame(temp9,row.names=T)
+temp10<-0
+for(i in 1:length(temp8)){
+	if (temp8[i]==T){
+		temp10<-as.numeric(temp9[temp9[1]==i,1])
+		temp9<-temp9[-temp10,]
+	}
+}
+suspect_card_balance<-temp9[-1]
 colnames(suspect_card_balance)<-c('ID',rep('Suspect Month',times=ncol(suspect_card_balance)-1))
 rownames(suspect_card_balance)<-c(rep('',times=nrow(suspect_card_balance)))
 
