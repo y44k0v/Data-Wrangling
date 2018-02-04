@@ -1,0 +1,4 @@
+Green: ID wrongs
+Yellow: Genre Wrong
+Red: Missing Values
+Blue: Suspect Beheavior of Card Balance
