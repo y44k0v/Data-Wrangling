@@ -17,13 +17,13 @@ dataraw<-read_xlsx(filein,sheet='Censo',col_names=T)
 #construction of name and code
 tempcode<-c()
 for(i in 1:nrow(dataraw)){
-tempcode<-c(tempcode,as.numeric(dataraw[i,1]))
+	tempcode<-c(tempcode,as.numeric(dataraw[i,1]))
 }
 codecom<-rep(tempcode,each=22)
 
 tempname<-c()
 for(i in 1:nrow(dataraw)){
-tempname<-c(tempname,as.character(dataraw[i,2]))
+	tempname<-c(tempname,as.character(dataraw[i,2]))
 }
 namecom<-rep(tempname,each=22)
 
@@ -32,9 +32,10 @@ namecom<-rep(tempname,each=22)
 tab<-cbind(codecom,namecom)
 ldat<-c()
 for(i in 1:nrow(dataraw)){
-for(j in 1:22){
-ldat<-c(ldat,as.numeric(dataraw[i,j+2]))
-}}
+	for(j in 1:22){
+		ldat<-c(ldat,as.numeric(dataraw[i,j+2]))
+	}
+}
 tab<-cbind(tab,ldat)
 colnames(tab)<-c('Codigo Comuna','Nombre Coomuna','Total Censo')
 

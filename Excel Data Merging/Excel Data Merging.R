@@ -23,10 +23,11 @@ year1<-cbind(c(1:nrow(year1)),year1)
 
 
 for(i in 1:nrow(year2)){
-if(length(year1[year1[2]==as.character(year2[i,1])])==0)
-tab<-rbind(tab,c(as.character(year2[i,1]),as.character(year2[i,2]),0,as.numeric(year2[i,3])))
-else
-tab[year1[year1[2]==as.character(year2[i,1]),1],4]<-year2[i,3]
+	if(length(year1[year1[2]==as.character(year2[i,1])])==0){
+		tab<-rbind(tab,c(as.character(year2[i,1]),as.character(year2[i,2]),0,as.numeric(year2[i,3])))
+	}else{
+		tab[year1[year1[2]==as.character(year2[i,1]),1],4]<-year2[i,3]
+	}
 }
 
 
@@ -37,10 +38,12 @@ year1<-cbind(c(1:nrow(year1)),year1)
 
 
 for(i in 1:nrow(year3)){
-if(length(year1[year1[2]==as.character(year3[i,1])])==0)
-tab<-rbind(tab,c(as.character(year3[i,1]),as.character(year3[i,2]),0,0,as.numeric(year3[i,3])))
-else
-tab[year1[year1[2]==as.character(year3[i,1]),1],5]<-year3[i,3]
+	if(length(year1[year1[2]==as.character(year3[i,1])])==0){
+		tab<-rbind(tab,c(as.character(year3[i,1]),as.character(year3[i,2]),0,0,as.numeric(year3[i,3])))
+	}
+	else{
+		tab[year1[year1[2]==as.character(year3[i,1]),1],5]<-year3[i,3]
+	}
 }
 
 

@@ -19,10 +19,10 @@ tab<-tab[2:length(tab)]
 
 #orthography corrections
 for(i in 1:nrow(tab)){
-tab[i,4]<-str_replace_all(tab[i,4],'BogotÃ¡','Bogota')
-tab[i,4]<-str_replace_all(tab[i,4],'MedellÃ­n','Medellin')
-tab[i,4]<-str_replace_all(tab[i,4],'ItaguÃ­','Itagui')
-tab[i,4]<-str_replace_all(tab[i,4],'TuluÃ¡','Tulua')
+	tab[i,4]<-str_replace_all(tab[i,4],'BogotÃ¡','Bogota')
+	tab[i,4]<-str_replace_all(tab[i,4],'MedellÃ­n','Medellin')
+	tab[i,4]<-str_replace_all(tab[i,4],'ItaguÃ­','Itagui')
+	tab[i,4]<-str_replace_all(tab[i,4],'TuluÃ¡','Tulua')
 }
 
 

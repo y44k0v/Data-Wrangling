@@ -27,11 +27,11 @@ ages<-dataraw[1:22,8]
 
 #generation of dataframe
 for(i in 1:length(codecom)){
-line<-c()
-for(j in 1:22){
-line<-c(line,dataraw[dataraw[7]==codecom[i]&dataraw[8]==ages[j],11][1])
-}
-tab<-rbind(tab,line)
+	line<-c()
+	for(j in 1:22){
+		line<-c(line,dataraw[dataraw[7]==codecom[i]&dataraw[8]==ages[j],11][1])
+	}
+	tab<-rbind(tab,line)
 }
 tab<-cbind(codecom,namecom,tab)
 colnames(tab)<-c('Codigo Comuna','Nombre Comuna',ages)
