@@ -67,22 +67,24 @@ colnames(id_wrong)<-c('Card Balance','Credit Card Bank A','Credit Card Bank B','
 card_balance_temp<-cbind(c(1:nrow(card_balance)),card_balance)
 temp2<-0
 for(i in 1:length(card_balance_id_wrong)){
-	if(is.na(card_balance_id_wrong[i])==F)
+	if(is.na(card_balance_id_wrong[i])==F){
 		temp2<-as.numeric(card_balance_temp[card_balance_temp[2]==card_balance_id_wrong[i]][1])
 		card_balance_temp<-card_balance_temp[-temp2,]
 		card_balance_temp<-card_balance_temp[-1]
 		card_balance_temp<-cbind(c(1:nrow(card_balance_temp)),card_balance_temp)
+	}
 }
 card_balance_temp<-card_balance_temp[-1]
 #credit card bank A
 credit_card_bank_a_temp<-cbind(c(1:nrow(credit_card_bank_a)),credit_card_bank_a)
 temp2<-0
 for(i in 1:length(credit_card_bank_a_id_wrong)){
-	if(is.na(credit_card_bank_a_id_wrong[i])==F)
+	if(is.na(credit_card_bank_a_id_wrong[i])==F){
 		temp2<-as.numeric(credit_card_bank_a_temp[credit_card_bank_a_temp[2]==credit_card_bank_a_id_wrong[i]][1])
 		credit_card_bank_a_temp<-credit_card_bank_a_temp[-temp2,]
 		credit_card_bank_a_temp<-credit_card_bank_a_temp[-1]
 		credit_card_bank_a_temp<-cbind(c(1:nrow(credit_card_bank_a_temp)),credit_card_bank_a_temp)
+	}	
 }
 credit_card_bank_a_temp<-credit_card_bank_a_temp[-1]
 #credit card bank B
@@ -220,7 +222,23 @@ for(i in 1:length(temp8)){
 }
 suspect_card_balance<-temp9[-1]
 colnames(suspect_card_balance)<-c('ID',rep('Suspect Month',times=ncol(suspect_card_balance)-1))
-rownames(suspect_card_balance)<-c(rep('',times=nrow(suspect_card_balance)))
+
+
+#merge credit balance
+credit_merge<-credit_card_bank_a_temp
+temp1<-cbind(c(1:nrow(credit_merge)),credit_merge[1])
+temp2<-0
+for(i in 1:nrow(credit_card_bank_b_temp)){
+	if(length(credit_card_bank_a_temp[credit_card_bank_a_temp[1]==credit_card_bank_b_temp[i,1]])==0){
+		credit_merge<-rbind(credit_merge,as.numeric(credit_card_bank_b[i,]))
+	}
+	if(length(credit_card_bank_a_temp[credit_card_bank_a_temp[1]==credit_card_bank_b_temp[i,1]])>0){
+		for(j in 2:ncol(credit_card_bank_a_temp)){
+			temp2<-temp1[temp1[2]==credit_card_bank_b_temp[i,1]][1]
+			credit_merge[temp2,j]<-sum(credit_card_bank_a[temp2,j],credit_card_bank_b_temp[i,j])
+		}
+	}
+}
 
 
 #generation files
@@ -230,14 +248,10 @@ fileout2<-loadWorkbook('Data Wrangled.xlsx',create=T)
 createSheet(fileout2,name='CardBalance')
 createName(fileout2,name='CardBalance',formula='CardBalance!$A$1')
 writeNamedRegion(fileout2,card_balance_temp,name='CardBalance')
-#credit card bank a
-createSheet(fileout2,name='CreditCardBankA')
-createName(fileout2,name='CreditCardBankA',formula='CreditCardBankA!$A$1')
-writeNamedRegion(fileout2,credit_card_bank_a_temp,name='CreditCardBankA')
-#credit card bank a
-createSheet(fileout2,name='CreditCardBankB')
-createName(fileout2,name='CreditCardBankB',formula='CreditCardBankB!$A$1')
-writeNamedRegion(fileout2,credit_card_bank_b_temp,name='CreditCardBankB')
+#total credit
+createSheet(fileout2,name='TotalCredit')
+createName(fileout2,name='TotalCredit',formula='TotalCredit!$A$1')
+writeNamedRegion(fileout2,credit_merge,name='TotalCredit')
 #mortgage credit
 createSheet(fileout2,name='MortgageCredit')
 createName(fileout2,name='MortgageCredit',formula='MortgageCredit!$A$1')
